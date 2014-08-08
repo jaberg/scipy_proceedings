@@ -1,0 +1,27 @@
+In reply to Reviewer 1:
+
+This reviewer seems to ask for much broader scope than we had planned for this article, which we intended to focus on Skdata rather than the handling of data more generally.
+
+I do not know what the reviewer means by the term "simulation providence" -- is it meant humourously? We are confused.
+
+
+In reply to Reviewer 2:
+
+We have added to the discussion of existing dataset projects the three that Reviewer 2 mentioned (Pylearn2, Alexandre Lacoste's, and Torch-Datasets). These are certainly relevant, especially for a Python-focused paper. We thank Reviewer 2 for pointing them out.
+
+
+The documentation of the library itself is certainly a work in progress! We thank the Reviewer for the feedback on the documentation format, and we will work toimprove the quality of both the code and documentation over time. Many hands make light work; we hope the publication of this article will encourage more users to help us improve the library.
+
+The Reviewer is correct regarding the ambiguity of meta-data. It's our engineering response to the reality that even large data sets typically have some notion of an index that fits in memory. We call this index the meta-data, and typically include in it as much data as fits easily into memory.
+
+We have clarified the term in the article text to read as follows:
+Generally, the choice of what aspects of a data set should be in the ``meta``
+table and what should be indexed indirectly is left up to the data set module
+author. The guiding criterion should be that the ``meta`` table should fit easily into memory in order that the
+library work as expected. If the entire dataset is small, then it can all
+be put into the ``meta`` list. If the data set is large, then the elements of
+the ``meta`` list should contain information for looking up the larger payload
+data, such as images, video, audio, etc. Standardizing data sets is not
+the job of the ``meta`` attribute, we'll see how to do that below in the
+discussion of Tasks.
+
