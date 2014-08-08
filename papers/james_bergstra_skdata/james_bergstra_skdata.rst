@@ -87,7 +87,7 @@ SkData provides a high-level interface for some, but not all supported data sets
 This high-level interface would normally be provided by submodule ``foo.view``.
 The high-level modules provide one or more views of the low-level data which make the underlying data fit the form required by machine learning algorithms.
 
-Relative to language-agnostic repositories (such as the [UCI]_ database of machine learning data sets),
+Relative to language-agnostic repositories (such as the [UCI]_ database of machine learning data sets, and [Lac12]_),
 SkData provides Python code for downloading and loading diverse data representations into more standardized in-memory formats.
 Anyone using these data sets in a Python program would have to use something like the low-level routines in SkData anyway to simply load the data.
 Relative to standardized repositories such as [MLData]_, SkData provides convenient downloading and loading logic, as well as formal protocols (in Python) for model selection and evaluation.
@@ -98,6 +98,18 @@ and future data set modules in SkData may use Pandas internally.
 The [PyTables]_ library provides a high-performance HDF5 wrapper.
 It would make sense to use SkData and PyTables together, such as for example
 for low-level SkData routines to store and manipulate downloaded data.
+[Pylearn2_] is primarily a Theano-powered library for deep learning, but it
+also includes code to support experiments on a number of standard data sets
+(mostly of images). The focus on image data sets motivated Pylearn2's choice
+to provide a standard interface that is a great fit for image or vector
+classification tasks, but can be more awkward for different sorts of tasks.
+Pylearn2 does support huge data sets by appealing to PyTables and HDF5.
+Beyond the Python ecosystem, the torch-datasets package ([TorDat]_)
+provides data sets for
+the popular [Torch]_ machine learning library, that is Lua-based.
+
+There is also a growing number of Python projects that provide
+data set
 
 
 This paper is organized into the following sections:
@@ -239,6 +251,16 @@ lists, dictionaries, NumPy arrays, Panda data frames, and/or PyTables ``Table`` 
 For example, the low-level LFW data set class's ``meta`` attribute is computed by parsing a few text files and walking the directory structure within ``LFW.home()``.
 The ``meta`` property is a list of dictionaries enumerating what images are present, how large they are, what color space they use, and the name of the individual in each image.
 It does not include all the pixel data because, in our judgement, the pixel data required a lot of memory and could be provided instead by a *lazy array* (see [Dealing with Large Data] below).
+Generally, the choice of what aspects of a data set should be in the ``meta``
+table and what should be indexed indirectly is left up to the data set module
+author. The guiding criterion should be that the ``meta`` table should fit easily into memory in order that the
+library work as expected. If the entire dataset is small, then it can all
+be put into the ``meta`` list. If the data set is large, then the elements of
+the ``meta`` list should contain information for looking up the larger payload
+data, such as images, video, audio, etc. Standardizing data sets is not
+the job of the ``meta`` attribute, we'll see how to do that below in the
+discussion of Tasks.
+
 The LFW low-level module contains an additional method called ``parse_pairs_file`` which parses some additional archived text files describing
 the train/test splits that the LFW authors recommend using for the development and evaluation of algorithms.
 This may seem ad-hoc, and indeed it is.
@@ -749,14 +771,34 @@ References
 ----------
 
 .. [CIFAR-10] A. Krizhevsky. *Learning Multiple Layers of Features from Tiny Images.* Masters Thesis, University of Toronto, 2009.
+
 .. [glumpy] https://code.google.com/p/glumpy/
+
 .. [HTF09] T. Hastie, R. Tibshirani, J. Friedman. *The Elements of Statistical Learning: Data Mining, Inference, and Prediction.* Springer, 2009.
+
 .. [Iris] http://archive.ics.uci.edu/ml/datasets/Iris
+
+.. [Lac12] A. Lacoste, F. Laviolette and M. Marchand. *Bayesian Comparison of
+Machine Learning Algorithms on Single and Multiple Datasets,* Proc. AISTATS, 2012.
+
 .. [LFW] G. B. Huang, M. Ramesh, T. Berg, and E. Learned-Miller. *Labeled Faces in the Wild: A Database for Studying Face Recognition in Unconstrained Environments.* University of Massachusetts, Amherst TR 07-49, 2007.
+
 .. [Netflix] http://www.netflixprize.com/
+
 .. [MLData] http://mldata.org
+
 .. [Pandas] http://pandas.pydata.org
+
 .. [PyTables] http://pytables.org
+
+.. [PyLearn2] Ian J. Goodfellow, David Warde-Farley, Pascal Lamblin, Vincent Dumoulin, Mehdi Mirza, Razvan Pascanu, James Bergstra, Frédéric Bastien, and Yoshua Bengio. *Pylearn2: a machine learning research library*, arXiv:1308.4214, 2013.
+
 .. [SkData] http://jaberg.github.io/skdata/
-.. [sklearn] Pedregosa et al. *Scikit-learn: Machine Learning in Python*, JMLR 12 pp. 2825--2830, 2011.
+
+.. [sklearn] Pedregosa et al. *Scikit-learn: Machine Learning in Python,* JMLR 12 pp. 2825--2830, 2011.
+
+.. [TorDat] https://github.com/rosejn/torch-datasets
+
+.. [Torch] The Torch Machine Learning Library: http://torch.ch/
+
 .. [UCI] http://archive.ics.uci.edu/ml/
