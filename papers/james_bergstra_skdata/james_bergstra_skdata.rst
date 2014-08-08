@@ -253,9 +253,9 @@ The ``meta`` property is a list of dictionaries enumerating what images are pres
 It does not include all the pixel data because, in our judgement, the pixel data required a lot of memory and could be provided instead by a *lazy array* (see [Dealing with Large Data] below).
 Generally, the choice of what aspects of a data set should be in the ``meta``
 table and what should be indexed indirectly is left up to the data set module
-author. The guiding criterion should be that the ``meta`` table should fit easily into memory in order that the
-library work as expected. If the entire dataset is small, then it can all
-be put into the ``meta`` list. If the data set is large, then the elements of
+author. The guiding criterion should be that the ``meta`` elements should provide some convenient representation of the data, and fit easily into memory.
+If the entire dataset is small, then it can all be put into the ``meta`` list.
+If the data set is large, then the elements of
 the ``meta`` list should contain information for looking up the larger payload
 data, such as images, video, audio, etc. Standardizing data sets is not
 the job of the ``meta`` attribute, we'll see how to do that below in the
@@ -778,8 +778,7 @@ References
 
 .. [Iris] http://archive.ics.uci.edu/ml/datasets/Iris
 
-.. [Lac12] A. Lacoste, F. Laviolette and M. Marchand. *Bayesian Comparison of
-Machine Learning Algorithms on Single and Multiple Datasets,* Proc. AISTATS, 2012.
+.. [Lac12] A. Lacoste, F. Laviolette and M. Marchand. *Bayesian Comparison of Machine Learning Algorithms on Single and Multiple Datasets,* Proc. AISTATS, 2012.
 
 .. [LFW] G. B. Huang, M. Ramesh, T. Berg, and E. Learned-Miller. *Labeled Faces in the Wild: A Database for Studying Face Recognition in Unconstrained Environments.* University of Massachusetts, Amherst TR 07-49, 2007.
 
@@ -802,3 +801,4 @@ Machine Learning Algorithms on Single and Multiple Datasets,* Proc. AISTATS, 201
 .. [Torch] The Torch Machine Learning Library: http://torch.ch/
 
 .. [UCI] http://archive.ics.uci.edu/ml/
+

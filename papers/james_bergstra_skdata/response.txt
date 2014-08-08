@@ -15,13 +15,4 @@ The documentation of the library itself is certainly a work in progress! We than
 The Reviewer is correct regarding the ambiguity of meta-data. It's our engineering response to the reality that even large data sets typically have some notion of an index that fits in memory. We call this index the meta-data, and typically include in it as much data as fits easily into memory.
 
 We have clarified the term in the article text to read as follows:
-Generally, the choice of what aspects of a data set should be in the ``meta``
-table and what should be indexed indirectly is left up to the data set module
-author. The guiding criterion should be that the ``meta`` table should fit easily into memory in order that the
-library work as expected. If the entire dataset is small, then it can all
-be put into the ``meta`` list. If the data set is large, then the elements of
-the ``meta`` list should contain information for looking up the larger payload
-data, such as images, video, audio, etc. Standardizing data sets is not
-the job of the ``meta`` attribute, we'll see how to do that below in the
-discussion of Tasks.
-
+Generally, the choice of what aspects of a data set should be in the ``meta`` table and what should be indexed indirectly is left up to the data set module author. The guiding criterion should be that the ``meta`` elements should provide some convenient representation of the data, and fit easily into memory.  If the entire dataset is small, then it can all be put into the ``meta`` list.  If the data set is large, then the elements of the ``meta`` list should contain information for looking up the larger payload data, such as images, video, audio, etc. Standardizing data sets is not the job of the ``meta`` attribute, we'll see how to do that below in the discussion of Tasks.
