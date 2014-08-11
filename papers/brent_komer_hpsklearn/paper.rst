@@ -30,16 +30,12 @@ Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learnin
     The Hyperopt library provides algorithms and parallelization infrastructure for performing hyperparameter optimization (model selection) in Python.
     This paper presents an introductory tutorial on the usage of the Hyperopt library, including the description of search spaces, minimization (in serial and parallel),
     and the analysis of the results collected in the course of minimization.
-    The paper closes with some discussion of ongoing and future work.
-
-.. class:: abstract
-
-    Hyperopt-sklearn is a new software project that provides automatic algorithm configuration of the Scikit-learn machine learning library.
+    This paper also gives an overview of Hyperopt-sklearn, a software project that provides automatic algorithm configuration of the Scikit-learn machine learning library.
     Following Auto-Weka, we take the view that the choice of classifier and even the choice of preprocessing module can be taken together to represent a *single large hyperparameter optimization problem*.
     We use Hyperopt to define a search space that encompasses many standard components (e.g. SVM, RF, KNN, PCA, TFIDF) and common patterns of composing them together.
     We demonstrate, using search algorithms in Hyperopt and standard benchmarking data sets (MNIST, 20-Newsgroups, Convex Shapes), that searching this space is practical and effective.
     In particular, we improve on best-known scores for the model space for both MNIST and Convex Shapes.
-
+    The paper closes with some discussion of ongoing and future work.
 
 .. class:: keywords
 
@@ -51,7 +47,7 @@ Introduction
 
 Sequential model-based optimization (SMBO, also known as Bayesian optimization) is a general technique for function optimization that includes some of the most
 call-efficient (in terms of function evaluations) optimization methods currently available.
-Originally developed for experiment design (and oil exploration, [Mockus78]_) SMBO methods are generally applicable to scenarios in which a user wishes to minimize some scalar-valued function :math:`f(x)` that is costly to evaluate, often in terms of time or money.
+Originally developed for experiment design (and oil exploration, [Moc78]_) SMBO methods are generally applicable to scenarios in which a user wishes to minimize some scalar-valued function :math:`f(x)` that is costly to evaluate, often in terms of time or money.
 Compared with standard optimization strategies such as conjugate gradient descent methods, model-based optimization algorithms invest more time between function evaluations in order to reduce the number of function evaluations overall.
 
 The advantages of SMBO are that it:
@@ -95,8 +91,8 @@ Hyperopt's ``fmin`` interface requires users to specify the configuration space 
 Specifying a probability distribution rather than just bounds and hard constraints allows domain experts to encode more of their intuitions
 regarding which values are plausible for various hyperparameters.
 Like SciPy's ``optimize.minimize`` interface, Hyperopt makes the SMBO algorithm itself an interchangeable component so that any search algorithm can be applied to any search problem.
-Currently three algorithms are provided -- random search, simulated annealing, and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [BBBK11]_ --
-and more algorithms are planned (including [SMAC]_, and Gaussian-process-based [SLA13]_).
+Currently three algorithms are provided -- random search, simulated annealing, and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [Ber11]_ --
+and more algorithms are planned (including [SMAC]_, and Gaussian-process-based [Sno12]_).
 
 We are motivated to make hyperparameter optimization more reliable for four reasons:
 
@@ -114,7 +110,7 @@ We are motivated to make hyperparameter optimization more reliable for four reas
 
 This paper describes the usage and architecture of Hyperopt, for both sequential and parallel optimization of expensive functions.
 Hyperopt can in principle be used for any SMBO problem, but our development and testing efforts have been limited so far to the optimization of
-hyperparameters for deep neural networks [hp-dbn]_, convolutional neural networks for object recognition [hp-convnet]_, and algorithms within the sklearn library.
+hyperparameters for deep neural networks [hp-dbn]_, convolutional neural networks for object recognition [hp-convnet]_, and algorithms within the sklearn library.[citationgoeshere]_
 
 
 Getting Started with Hyperopt
@@ -788,7 +784,6 @@ evaluation in the parallel case can do so by using a lower-level calling
 convention for their objective function.
 
 
-
 Hyperopt-Sklearn: Automatic Hyperparameter Configuration for Scikit-Learn
 -------------------------------------------------------------------------
 
@@ -1123,22 +1118,11 @@ Figure :ref:`avgtestscores` shows that there was no penalty for searching broadl
 We performed optimization runs of up to 300 function evaluations searching the entire space,
 and compared the quality of solution with specialized searches of specific classifier types (including best known classifiers).
 
-Figure :ref:`npie` shows that search could find different, good models. This figure was constructed by running hyperopt-sklearn with different initial conditions (number of evaluations, choice of optimization algorithm, and random number seed) and keeping track of what final model was chosen after each run.
-Although support vector machines were always among the best, the parameters of best SVMs looked very different across data sets.
-For example, on the image data sets (MNIST and Convex) the SVMs chosen never had a sigmoid or linear kernel, while on 20 newsgroups the linear and sigmoid kernel were often best.
-
 .. figure:: AverageTestScoresClassifiersTPE.png
 
    :label:`avgtestscores`
    For each data set, searching the full configuration space (“Any Classifier”) delivered performance approximately on par with a search that was restricted to the best classifier type.
    (Best viewed in color.)
-
-.. figure:: pie.png
-
-   :label:`npie`
-   Looking at the best models from all optimization runs performed on the full search space (using different initial conditions, and different optimization algorithms) we see that different data sets are handled best by different classifiers.
-   SVC was the only classifier ever chosen as the best model for Convex Shapes, and was often found to be best on MNIST and 20 Newsgroups, however the best SVC parameters were very different across data sets.
-
 
 .. table:: Hyperopt-sklearn scores relative to selections from literature on the three data sets used in our experiments. On MNIST, hyperopt-sklearn is one of the best-scoring methods that does not use image-specific domain knowledge (these scores and others may be found at http://yann.lecun.com/exdb/mnist/). On 20 Newsgroups, hyperopt-sklearn is competitive with similar approaches from the literature (scores taken from [Gua09]_ ). In the 20 Newsgroups data set, the score reported for hyperopt-sklearn is the weighted-average F1 score provided by sklearn. The other approaches shown here use the macro-average F1 score. On Convex Shapes, hyperopt-sklearn outperforms previous automatic algorithm configuration approaches [Egg13]_ and manual tuning [Lar07]_ .
    :label:`tablecompare`
@@ -1170,13 +1154,11 @@ For example, on the image data sets (MNIST and Convex) the SVMs chosen never had
    Right: TPE makes gradual progress on 20 Newsgroups over 300 iterations and gives no indication of convergence.
 
 
-
-Discussion and Future Work
---------------------------
+Discussion
+----------
 
 Table :ref:`tablecompare` lists the test set scores of the best models found by cross-validation, as well as some points of reference from previous work.
 Hyperopt-sklearn's scores are relatively good on each data set, indicating that with hyperopt-sklearn's parameterization, Hyperopt's optimization algorithms are competitive with human experts.
-
 
 The model with the best performance on the MNIST Digits data set uses deep artificial neural networks. Small receptive fields of convolutional winner-take-all neurons build up the large network.
 Each neural column becomes an expert on inputs preprocessed in different ways,
@@ -1198,6 +1180,38 @@ a more accurate model than was previously believed to exist in any search
 space, let alone a search space of such standard components.
 This result underscores the difficulty and importance of hyperparameter
 search.
+
+
+Ongoing and Future Work
+-----------------------
+
+Hyperopt is the subject of ongoing and planned future work in the
+algorithms that it provides, the domains that it covers, and the technology
+that it builds on.
+
+Related Bayesian optimization software such as Frank Hutter et al's [SMAC]_, and
+Jasper Snoek's [Spearmint]_
+implement state-of-the-art algorithms that are different from the TPE
+algorithm currently implemented in Hyperopt.
+Questions about which of these algorithms performs best in which circumstances,
+and over what search budgets remain topics of active research.
+One of the first technical milestones on the road to answering those research
+questions is to make each of those algorithms applicable to common search
+problems.
+
+Hyperopt was developed to support research into deep learning [Ber11]_
+and computer vision [Ber13a]_. Corresponding projects [hp-dbn]_ and
+[hp-convnet]_ have been made public on Github to illustrate how Hyperopt can
+be used to define and optimize large-scale hyperparameter optimization
+problems.
+
+With regards to implementation decisions in Hyperopt,
+several people have asked about the possibility of using IPython instead of
+mongodb to support parallelism.
+This would allow us to build on IPython's cluster management interface,
+and relax the constraint that objective function results be JSON-compatible.
+If anyone implements this functionality,
+a pull request to Hyperopt's master branch would be most welcome.
 
 Hyperopt-sklearn provides many opportunities for future work:
 more classifiers and preprocessing modules could be included in the search space,
@@ -1221,15 +1235,16 @@ Computational wall time spent on search is of great practical importance, and hy
 Techniques for recognizing bad performers early could speed up search enormously [Swe14]_, [Dom14]_.
 Relatedly, hyperopt-sklearn currently lacks support for K-fold cross-validation. In that setting, it will be crucial to follow SMAC in the use of racing algorithms to skip un-necessary folds.
 
+Summary and Further Reading
+---------------------------
 
-Conclusions
------------
-
-We have introduced Hyperopt-sklearn, a Python package for automatic algorithm configuration of standard machine learning algorithms provided by Scikit-Learn.
-Hyperopt-sklearn provides a unified view of 6 possible preprocessing modules and 6 possible classifiers, yet with the help of Hyperopt's optimization functions
-it is able to both rival and surpass human experts in algorithm configuration.
-We hope that it provides practitioners with a useful tool for the development of machine learning systems,
-and automatic machine learning researchers with benchmarks for future work in algorithm configuration.
+Hyperopt is a Python library for Sequential Model-Based Optimization (SMBO)
+that has been designed to meet the needs of machine learning researchers
+performing hyperparameter optimization. It provides a flexible and powerful
+language for describing search spaces, and supports scheduling asynchronous function
+evaluations for evaluation by multiple processes and computers.
+It is BSD-licensed and available for download from PyPI and Github.
+Further documentation is available at [http://jaberg.github.com/hyperopt].
 
 Acknowledgements
 ----------------
@@ -1246,13 +1261,6 @@ References
 .. [BB12] J. Bergstra  and Y. Bengio.
     *Random Search for Hyperparameter Optimization*
     J. Machine Learning Research, 13:281--305, 2012.
-.. [BBBK11] J. Bergstra, R. Bardenet, Y. Bengio and B. Kégl.
-    *Algorithms for Hyper-parameter Optimization*.
-    Proc. Neural Information Processing Systems 24 (NIPS2011), 2546–2554, 2011.
-.. [BYC13] J. Bergstra, D. Yamins and D. D. Cox.
-    *Making a Science of Model Search: Hyperparameter Optimization in Hundreds of
-    Dimensions for Vision Architectures*.
-    Proc. ICML, 2013.
 .. [Brochu10] E. Brochu.
     *Interactive Bayesian Optimization: Learning Parameters for Graphics and
     Animation*,
@@ -1261,26 +1269,18 @@ References
 .. [hp-dbn] https://github.com/jaberg/hyperopt-dbn
 .. [hp-sklearn] https://github.com/jaberg/hyperopt-sklearn
 .. [hp-convnet] https://github.com/jaberg/hyperopt-convnet
-.. [Mockus78] J. Mockus, V. Tiesis, and A. Zilinskas.
-    *The applicatoin of Bayesian methods for seeking the extremum*,
-    Towards Global Optimization, Elsevier, 1978.
 .. [mongodb] www.mongodb.org
 .. [ROAR] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
 .. [sklearn] http://scikit-learn.org
-.. [SLA13] J. Snoek, H. Larochelle and R. P. Adams.
-    *Practical Bayesian Optimization of Machine Learning Algorithms*,
-    NIPS, 2012.
 .. [Spearmint] http://www.cs.toronto.edu/~jasper/software.html
 .. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
 
 ..  <http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf>
 .. <http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf>
 
-References
-----------
-.. [Ber11] J. Bergstra, R. Bardenet, Y. Bengio, and B. Kegl. *Algorithms for hyper-parameter optimization*,
+.. [Ber11] J. Bergstra, R. Bardenet, Y. Bengio, and B. Kéggl. *Algorithms for hHyperparameter Optimization*,
            NIPS, 24:2546–2554, 2011.
-.. [Ber13a] J. Bergstra, D. Yamins, and D. D. Cox. *Making a science of model search: Hyperparameter optimization in hundreds of dimensions for vision architectures*,
+.. [Ber13a] J. Bergstra, D. Yamins, and D. D. Cox. *Making a Science of Model Search: Hyperparameter Optimization in Hundreds of Dimensions for Vision Architectures*,
            In Proc. ICML, 2013a.
 .. [Ber13b] J. Bergstra, D. Yamins, and D. D. Cox. *Hyperopt: A Python library for optimizing the hyperparameters of machine learning algorithms*,
            SciPy'13, 2013b.
@@ -1313,56 +1313,4 @@ References
            arXiv:1406.3896, 2014.
 .. [Tho13] C. Thornton, F. Hutter, H. H. Hoos, and K. Leyton-Brown. *Auto-WEKA: Automated selection and hyper-parameter optimization of classification algorithms*,
            KDD 847-855, 2013.
-
-
-Ongoing and Future Work
-------------------------
-
-Hyperopt is the subject of ongoing and planned future work in the
-algorithms that it provides, the domains that it covers, and the technology
-that it builds on.
-
-Related Bayesian optimization software such as Frank Hutter et al's [SMAC]_, and
-Jasper Snoek's [Spearmint]_
-implement state-of-the-art algorithms that are different from the TPE
-algorithm currently implemented in Hyperopt.
-Questions about which of these algorithms performs best in which circumstances,
-and over what search budgets remain topics of active research.
-One of the first technical milestones on the road to answering those research
-questions is to make each of those algorithms applicable to common search
-problems.
-
-Hyperopt was developed to support research into deep learning [BBBK11]_
-and computer vision [BYC13]_. Corresponding projects [hp-dbn]_ and
-[hp-convnet]_ have been made public on Github to illustrate how Hyperopt can
-be used to define and optimize large-scale hyperparameter optimization
-problems.
-Currently, Hristijan Bogoevski is investigating Hyperopt as a tool for
-optimizing the suite of machine learning algorithms provided by sklearn;
-that work is slated to appear in the [hp-sklearn]_ project in the
-not-too-distant future.
-
-With regards to implementation decisions in Hyperopt,
-several people have asked about the possibility of using IPython instead of
-mongodb to support parallelism.
-This would allow us to build on IPython's cluster management interface,
-and relax the constraint that objective function results be JSON-compatible.
-If anyone implements this functionality,
-a pull request to Hyperopt's master branch would be most welcome.
-
-
-Summary and Further Reading
----------------------------
-
-Hyperopt is a Python library for Sequential Model-Based Optimization (SMBO)
-that has been designed to meet the needs of machine learning researchers
-performing hyperparameter optimization. It provides a flexible and powerful
-language for describing search spaces, and supports scheduling asynchronous function
-evaluations for evaluation by multiple processes and computers.
-It is BSD-licensed and available for download from PyPI and Github.
-Further documentation is available at [http://jaberg.github.com/hyperopt].
-
-
-
-
 
