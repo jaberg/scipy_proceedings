@@ -32,9 +32,18 @@ Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learnin
     and the analysis of the results collected in the course of minimization.
     The paper closes with some discussion of ongoing and future work.
 
+.. class:: abstract
+
+    Hyperopt-sklearn is a new software project that provides automatic algorithm configuration of the Scikit-learn machine learning library.
+    Following Auto-Weka, we take the view that the choice of classifier and even the choice of preprocessing module can be taken together to represent a *single large hyperparameter optimization problem*.
+    We use Hyperopt to define a search space that encompasses many standard components (e.g. SVM, RF, KNN, PCA, TFIDF) and common patterns of composing them together.
+    We demonstrate, using search algorithms in Hyperopt and standard benchmarking data sets (MNIST, 20-Newsgroups, Convex Shapes), that searching this space is practical and effective.
+    In particular, we improve on best-known scores for the model space for both MNIST and Convex Shapes.
+
+
 .. class:: keywords
 
-    Bayesian optimization, hyperparameter optimization, model selection
+    Bayesian optimization, hyperparameter optimization, model selection, scikit-learn
 
 
 Introduction
@@ -63,6 +72,7 @@ For example, Support Vector Machines (SVMs) have hyperparameters that include th
 (and more generally, the preprocessing of input data), the choice of similarity kernel, and the various parameters that are specific to that kernel choice.
 Decision trees are another machine learning algorithm with hyperparameters related to the heuristic for creating internal nodes, and the pruning strategy for the tree after (or during) training.
 Neural networks are a classic type of machine learning algorithm but they have so many hyperparameters that they have been considered too troublesome for inclusion in the sklearn library.
+(A popular open-source machine learning toolbox)
 
 Hyperparameters generally have a significant effect on the success of machine learning algorithms.
 A poorly-configured SVM may perform no better than chance, while a well-configured one may achieve state-of-the-art prediction accuracy.
@@ -85,8 +95,8 @@ Hyperopt's ``fmin`` interface requires users to specify the configuration space 
 Specifying a probability distribution rather than just bounds and hard constraints allows domain experts to encode more of their intuitions
 regarding which values are plausible for various hyperparameters.
 Like SciPy's ``optimize.minimize`` interface, Hyperopt makes the SMBO algorithm itself an interchangeable component so that any search algorithm can be applied to any search problem.
-Currently two algorithms are provided -- random search and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [BBBK11]_ --
-and more algorithms are planned (including simulated annealing, [SMAC]_, and Gaussian-process-based [SLA13]_).
+Currently three algorithms are provided -- random search, simulated annealing, and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [BBBK11]_ --
+and more algorithms are planned (including [SMAC]_, and Gaussian-process-based [SLA13]_).
 
 We are motivated to make hyperparameter optimization more reliable for four reasons:
 
@@ -104,7 +114,7 @@ We are motivated to make hyperparameter optimization more reliable for four reas
 
 This paper describes the usage and architecture of Hyperopt, for both sequential and parallel optimization of expensive functions.
 Hyperopt can in principle be used for any SMBO problem, but our development and testing efforts have been limited so far to the optimization of
-hyperparameters for deep neural networks [hp-dbn]_ and convolutional neural networks for object recognition [hp-convnet]_.
+hyperparameters for deep neural networks [hp-dbn]_, convolutional neural networks for object recognition [hp-convnet]_, and algorithms within the sklearn library.
 
 
 Getting Started with Hyperopt
@@ -779,36 +789,8 @@ convention for their objective function.
 
 
 
--------------------------------------------------------------------------
 Hyperopt-Sklearn: Automatic Hyperparameter Configuration for Scikit-Learn
 -------------------------------------------------------------------------
-
-.. class:: abstract
-
-    Hyperopt-sklearn is a new software project that provides automatic algorithm configuration of the Scikit-learn machine learning library.
-    Following Auto-Weka, we take the view that the choice of classifier and even the choice of preprocessing module can be taken together to represent a *single large hyperparameter optimization problem*.
-    We use Hyperopt to define a search space that encompasses many standard components (e.g. SVM, RF, KNN, PCA, TFIDF) and common patterns of composing them together.
-    We demonstrate, using search algorithms in Hyperopt and standard benchmarking data sets (MNIST, 20-Newsgroups, Convex Shapes), that searching this space is practical and effective.
-    In particular, we improve on best-known scores for the model space for both MNIST and Convex Shapes.
-
-.. class:: keywords
-
-   bayesian optimization, model selection, hyperparameter optimization, scikit-learn
-
-Introduction
-------------
-
-The size of data sets and the speed of computers have increased to the point where it is often easier to fit complex functions to data using statistical estimation techniques than it is to design them by hand.
-The fitting of such functions (training machine learning algorithms) remains a relatively arcane art, typically mastered in the course of a graduate degree and years of experience.
-Recently however, techniques for automatic algorithm configuration based on
-Regression Trees [Hut11]_,
-Gaussian Processes [Moc78]_ [Sno12]_,
-and density-estimation techniques [Ber11]_
-have emerged as viable alternatives to hand-tuning by domain specialists.
-
-Hyperparameter optimization of machine learning systems was first applied to neural networks, where the number of parameters can be overwhelming.
-For example, [Ber11]_ tuned Deep Belief Networks (DBNs) with up to 32 hyperparameters,
-and [Ber13a]_ showed that similar methods could search a 238-dimensional configuration space describing multi-layer convolutional networks (convnets) for image classification.
 
 Relative to DBNs and convnets, algorithms such as Support Vector Machines (SVMs) and Random Forests (RFs) have a small-enough number of hyperparameters that manual tuning and grid or random search provides satisfactory results.  Taking a step back though, there is often no particular reason to use either an SVM or an RF when they are both computationally viable.
 A model-agnostic practitioner may simply prefer to go with the one that provides greater accuracy.
@@ -820,47 +802,11 @@ However, Weka is a GPL-licensed Java library, and was not written with scalabili
 Scikit-learn [Ped11]_ is another library of machine learning algorithms. Is written in Python (with many modules in C for greater speed), and is BSD-licensed.
 Scikit-learn is widely used in the scientific Python community and supports many machine learning application areas.
 
-With this paper we introduce Hyperopt-Sklearn: a project that brings the benefits of automatic algorithm configuration to users of Python and scikit-learn.
+In the following sections we introduce Hyperopt-Sklearn: a project that brings the benefits of automatic algorithm configuration to users of Python and scikit-learn.
 Hyperopt-Sklearn uses Hyperopt [Ber13b]_ to describe a search space over possible configurations of Scikit-Learn components, including preprocessing and classification modules.
 Section 2 describes our configuration space of 6 classifiers and 5 preprocessing modules that encompasses a strong set of classification systems for dense and sparse feature classification (of images and text).
 Section 3 presents experimental evidence that search over this space is viable, meaningful, and effective.
 Section 4 presents a discussion of the results, and directions for future work.
-
-
-Background: Hyperopt for Optimization
--------------------------------------
-
-The Hyperopt library [Ber13b]_ offers optimization algorithms for search spaces that arise in algorithm configuration.
-These spaces are characterized by a variety of types of variables (continuous, ordinal,
-categorical), different sensitivity profiles (e.g. uniform vs. log scaling),
-and conditional structure (when there is a choice between two classifiers,
-the parameters of one classifier are irrelevant when the other classifier
-is chosen).
-To use Hyperopt, a user must define/choose three things:
-
-1. a search domain,
-
-2. an objective function,
-
-3. an optimization algorithm.
-
-The search domain is specified via random variables, whose distributions
-should be chosen so that the most promising combinations have high prior
-probability.
-The search domain can include Python operators and functions that combine
-random variables into more convenient data structures for the objective
-function.
-The objective function maps a joint sampling of these random variables to
-a scalar-valued score that the optimization algorithm will try to *minimize*.
-Having chosen a search domain, an objective function, and an optimization
-algorithm, Hyperopt's ``fmin`` function carries out the optimization,
-and stores results of the search to a database (e.g. either a simple
-Python list or a MongoDB instance).
-The `fmin` call carries out the simple analysis of finding the best-performing
-configuration, and returns that to the caller.
-The `fmin` call can use multiple workers when using the MongoDB backend,
-to implement parallel model selection on a compute cluster.
-
 
 Scikit-Learn Model Selection as a Search Problem
 ------------------------------------------------
