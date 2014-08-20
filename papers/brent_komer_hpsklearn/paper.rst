@@ -110,7 +110,7 @@ We are motivated to make hyperparameter optimization more reliable for four reas
 
 This paper describes the usage and architecture of Hyperopt, for both sequential and parallel optimization of expensive functions.
 Hyperopt can in principle be used for any SMBO problem, but our development and testing efforts have been limited so far to the optimization of
-hyperparameters for deep neural networks [hp-dbn]_, convolutional neural networks for object recognition [hp-convnet]_, and algorithms within the sklearn library.[citationgoeshere]_
+hyperparameters for deep neural networks [hp-dbn]_, convolutional neural networks for object recognition [hp-convnet]_, and algorithms within the sklearn library.[sklearn-paper]_
 
 
 Getting Started with Hyperopt
@@ -1151,7 +1151,7 @@ and compared the quality of solution with specialized searches of specific class
 .. figure:: AvgMinValidErrorTPE.png
 
    :label:`validtpe`
-   Right: TPE makes gradual progress on 20 Newsgroups over 300 iterations and gives no indication of convergence.
+   TPE makes gradual progress on 20 Newsgroups over 300 iterations and gives no indication of convergence. The results are averaged over 9 trials.
 
 
 Discussion
@@ -1270,10 +1270,10 @@ References
 .. [hp-sklearn] https://github.com/jaberg/hyperopt-sklearn
 .. [hp-convnet] https://github.com/jaberg/hyperopt-convnet
 .. [mongodb] www.mongodb.org
-.. [ROAR] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
 .. [sklearn] http://scikit-learn.org
 .. [Spearmint] http://www.cs.toronto.edu/~jasper/software.html
 .. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
+.. [sklearn-paper] Pedregosa et al. *Scikit-learn: Machine Learning in Python*, JMLR 12, pp. 2825-2830, 2011.
 
 ..  <http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf>
 .. <http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf>
