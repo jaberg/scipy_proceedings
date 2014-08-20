@@ -796,9 +796,9 @@ Scikit-learn is widely used in the scientific Python community and supports many
 
 In the following sections we introduce Hyperopt-Sklearn: a project that brings the benefits of automatic algorithm configuration to users of Python and scikit-learn.
 Hyperopt-Sklearn uses Hyperopt to describe a search space over possible configurations of Scikit-Learn components, including preprocessing and classification modules.
-Section 2 describes our configuration space of 6 classifiers and 5 preprocessing modules that encompasses a strong set of classification systems for dense and sparse feature classification (of images and text).
-Section 3 presents experimental evidence that search over this space is viable, meaningful, and effective.
-Section 4 presents a discussion of the results, and directions for future work.
+The next section describes our configuration space of 6 classifiers and 5 preprocessing modules that encompasses a strong set of classification systems for dense and sparse feature classification (of images and text).
+This is followed by experimental evidence that search over this space is viable, meaningful, and effective.
+The final sections present a discussion of the results, and directions for future work.
 
 Scikit-Learn Model Selection as a Search Problem
 ------------------------------------------------
