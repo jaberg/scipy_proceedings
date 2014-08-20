@@ -68,7 +68,7 @@ For example, Support Vector Machines (SVMs) have hyperparameters that include th
 (and more generally, the preprocessing of input data), the choice of similarity kernel, and the various parameters that are specific to that kernel choice.
 Decision trees are another machine learning algorithm with hyperparameters related to the heuristic for creating internal nodes, and the pruning strategy for the tree after (or during) training.
 Neural networks are a classic type of machine learning algorithm but they have so many hyperparameters that they have been considered too troublesome for inclusion in the sklearn library.
-(A popular open-source machine learning toolbox)
+(A popular open-source machine learning toolbox) [Ped11]_
 
 Hyperparameters generally have a significant effect on the success of machine learning algorithms.
 A poorly-configured SVM may perform no better than chance, while a well-configured one may achieve state-of-the-art prediction accuracy.
@@ -110,7 +110,7 @@ We are motivated to make hyperparameter optimization more reliable for four reas
 
 This paper describes the usage and architecture of Hyperopt, for both sequential and parallel optimization of expensive functions.
 Hyperopt can in principle be used for any SMBO problem, but our development and testing efforts have been limited so far to the optimization of
-hyperparameters for deep neural networks [hp-dbn]_, convolutional neural networks for object recognition [hp-convnet]_, and algorithms within the sklearn library.[sklearn-paper]_
+hyperparameters for deep neural networks [hp-dbn]_, convolutional neural networks for object recognition [hp-convnet]_, and algorithms within the sklearn library. [Ped11]_
 
 
 Getting Started with Hyperopt
@@ -182,20 +182,17 @@ we have given Hyperopt an idea of what range of values for :math:`y` to prioriti
 Step 3: choose a search algorithm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Choosing the search algorithm is currently as simple as passing ``algo=hyperopt.tpe.suggest`` or ``algo=hyperopt.rand.suggest``
-as a keyword argument to ``hyperopt.fmin``.
-To use random search to our search problem we can type:
+Choosing the search algorithm is currently as simple as passing the function that implements that algorithm 
+as the ``algo`` keyword argument to ``hyperopt.fmin``.
+Currently supported search algorithms are random (``hyperopt.rand.suggest``), 
+annealing (``hyperopt.anneal.suggest``), 
+and TPE (``hyperopt.tpe.suggest``).
+To use random search on our search problem we can type:
 
 .. code-block:: python
 
     from hyperopt import hp, fmin, rand, tpe, space_eval
     best = fmin(q, space, algo=rand.suggest)
-    print best
-    # =>  XXX
-    print space_eval(space, best)
-    # =>  XXX
-
-    best = fmin(q, space, algo=tpe.suggest)
     print best
     # =>  XXX
     print space_eval(space, best)
@@ -798,7 +795,7 @@ Scikit-learn [Ped11]_ is another library of machine learning algorithms. Is writ
 Scikit-learn is widely used in the scientific Python community and supports many machine learning application areas.
 
 In the following sections we introduce Hyperopt-Sklearn: a project that brings the benefits of automatic algorithm configuration to users of Python and scikit-learn.
-Hyperopt-Sklearn uses Hyperopt [Ber13b]_ to describe a search space over possible configurations of Scikit-Learn components, including preprocessing and classification modules.
+Hyperopt-Sklearn uses Hyperopt to describe a search space over possible configurations of Scikit-Learn components, including preprocessing and classification modules.
 Section 2 describes our configuration space of 6 classifiers and 5 preprocessing modules that encompasses a strong set of classification systems for dense and sparse feature classification (of images and text).
 Section 3 presents experimental evidence that search over this space is viable, meaningful, and effective.
 Section 4 presents a discussion of the results, and directions for future work.
@@ -1273,7 +1270,6 @@ References
 .. [sklearn] http://scikit-learn.org
 .. [Spearmint] http://www.cs.toronto.edu/~jasper/software.html
 .. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
-.. [sklearn-paper] Pedregosa et al. *Scikit-learn: Machine Learning in Python*, JMLR 12, pp. 2825-2830, 2011.
 
 ..  <http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf>
 .. <http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf>
@@ -1282,8 +1278,6 @@ References
            NIPS, 24:2546–2554, 2011.
 .. [Ber13a] J. Bergstra, D. Yamins, and D. D. Cox. *Making a Science of Model Search: Hyperparameter Optimization in Hundreds of Dimensions for Vision Architectures*,
            In Proc. ICML, 2013a.
-.. [Ber13b] J. Bergstra, D. Yamins, and D. D. Cox. *Hyperopt: A Python library for optimizing the hyperparameters of machine learning algorithms*,
-           SciPy'13, 2013b.
 .. [Cir12] D. Ciresan, U. Meier, and J. Schmidhuber. *Multi-column Deep Neural Networks for Image Classification*,
            IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 3642-3649. 2012.
 .. [Dom14] T. Domhan, T. Springenberg, F. Hutter. *Extrapolating Learning Curves of Deep Neural Networks*,
