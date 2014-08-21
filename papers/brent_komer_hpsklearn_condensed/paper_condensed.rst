@@ -18,6 +18,7 @@
 :email: davidcox@fas.harvard.edu
 :institution: Harvard University
 
+.. XXX: Search and replace sklearn with Scikit-Learn wherever it's mentioned in the text.
 
 --------------------------------------------------------------------------------------------
 Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learning Algorithms
@@ -48,6 +49,7 @@ Introduction
 Sequential model-based optimization (SMBO, also known as Bayesian optimization) is a general technique for function optimization that includes some of the most
 call-efficient (in terms of function evaluations) optimization methods currently available.
 Originally developed for experiment design (and oil exploration, [Moc78]_) SMBO methods are generally applicable to scenarios in which a user wishes to minimize some scalar-valued function :math:`f(x)` that is costly to evaluate, often in terms of time or money.
+.. : double-check this oil exploration reference, or, easier, delete it
 Compared with standard optimization strategies such as conjugate gradient descent methods, model-based optimization algorithms invest more time between function evaluations in order to reduce the number of function evaluations overall.
 
 The advantages of SMBO are that it:
@@ -64,12 +66,16 @@ The advantages of SMBO are that it:
 Many widely-used machine learning algorithms take a significant amount of time to train from data.
 At the same time, these same algorithms must be configured prior to training.
 These configuration variables are called *hyperparameters*.
+.. Which configuration variables?
 For example, Support Vector Machines (SVMs) have hyperparameters that include the regularization strength (often :math:`C`) the scaling of input data
 (and more generally, the preprocessing of input data), the choice of similarity kernel, and the various parameters that are specific to that kernel choice.
 Decision trees are another machine learning algorithm with hyperparameters related to the heuristic for creating internal nodes, and the pruning strategy for the tree after (or during) training.
 Neural networks are a classic type of machine learning algorithm but they have so many hyperparameters that they have been considered too troublesome for inclusion in the sklearn library.
+.. Since sklearn hasn't been introduced yet, this sentence is confusing.
+.. Punctuation is a bit messed up here too.
 (A popular open-source machine learning toolbox) [Ped11]_
 
+.. A sentence starting with "Hyperparameter optimization is ..." should be either in the para above or below
 Hyperparameters generally have a significant effect on the success of machine learning algorithms.
 A poorly-configured SVM may perform no better than chance, while a well-configured one may achieve state-of-the-art prediction accuracy.
 To experts and non-experts alike, adjusting hyperparameters to optimize end-to-end performance can be a tedious and difficult task.
@@ -92,7 +98,8 @@ Specifying a probability distribution rather than just bounds and hard constrain
 regarding which values are plausible for various hyperparameters.
 Like SciPy's ``optimize.minimize`` interface, Hyperopt makes the SMBO algorithm itself an interchangeable component so that any search algorithm can be applied to any search problem.
 Currently three algorithms are provided -- random search, simulated annealing, and Tree-of-Parzen-Estimators (TPE) algorithm introduced in [Ber11]_ --
-and more algorithms are planned (including [SMAC]_, and Gaussian-process-based [Sno12]_).
+and more algorithms are planned (including [SMAC]_, and Gaussian-process-based [Sno12]_ and [Ber14]_).
+.. Ber14 would refer to the ICML workshop paper, where GPs are provided for Hyperopt.
 
 We are motivated to make hyperparameter optimization more reliable for four reasons:
 
@@ -109,8 +116,11 @@ We are motivated to make hyperparameter optimization more reliable for four reas
     As algorithm designers, we appreciate Hyperopt's capacity to find failure modes via configurations that we had not considered.
 
 This paper describes the usage and architecture of Hyperopt, for both sequential and parallel optimization of expensive functions.
+.. Not anymore, we're going to talk about the Scikit-Learn library.
 Hyperopt can in principle be used for any SMBO problem, but our development and testing efforts have been limited so far to the optimization of
 hyperparameters for deep neural networks [hp-dbn]_, convolutional neural networks for object recognition [hp-convnet]_, and algorithms within the sklearn library. [Ped11]_
+
+.. TODO: ADD "THE PAPER IS ORGANIZED AS FOLLOWS: ..."
 
 
 Getting Started with Hyperopt
@@ -198,6 +208,8 @@ To use random search on our search problem we can type:
     print space_eval(space, best)
     # =>  XXX
 
+.. TODO: REMOVE THE XXX bits from the source code, why are they there??
+
 
 The search algorithms are global functions which may generally have extra keyword arguments
 that control their operation beyond the ones used by ``fmin`` (they represent hyper-hyperparameters!).
@@ -213,6 +225,7 @@ but if you wish to change them you can do it like this:
     print best
     # =>  XXX
 
+.. TODO: REMOVE THE XXX bits from the source code, why are they there??
 
 In a nutshell, these are the steps to using Hyperopt.
 Implement an objective function that maps configuration points to a real-valued loss value,
@@ -523,6 +536,8 @@ Configuration Example: ``sklearn`` classifiers
 To see how we can use these mechanisms to describe a more realistic
 configuration space,
 let's look at how one might describe a set of classification algorithms in [sklearn]_.
+
+.. TODO: distinguish this illustrative code from the *actual* hpsklearn project.
 
 .. code-block:: python
 
