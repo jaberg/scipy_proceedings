@@ -66,17 +66,20 @@ The advantages of SMBO are that it:
 
 Many widely-used machine learning algorithms take a significant amount of time to train from data.
 At the same time, these same algorithms must be configured prior to training.
+Most implementations of machine learning algorithms have a set of configuration variables that the user can set which have various effects on how the training is done. Often there is no configuration that is optimal for all problem domains, so the best configuration will depend on the particular application.
 These configuration variables are called *hyperparameters*.
 .. Which configuration variables?
+Implementations of many of these algorithms can be found in the Scikit-Learn project. [Ped11]_
+Scikit-Learn is a open-source machine learning library written in Python that is quite popular amoung computational scientists.
+It boasts an easy to use interface and contains many tools for machine learning, including classification, preprocessing, clustering, and regression.
+Many of these algorithms can be useful out-of-the-box, but to get the best performance the hyperparameters need to be tuned to the particular problem domain in which the algorithm is to be used.
 For example, Support Vector Machines (SVMs) have hyperparameters that include the regularization strength (often :math:`C`) the scaling of input data
 (and more generally, the preprocessing of input data), the choice of similarity kernel, and the various parameters that are specific to that kernel choice.
 Decision trees are another machine learning algorithm with hyperparameters related to the heuristic for creating internal nodes, and the pruning strategy for the tree after (or during) training.
 Neural networks are a classic type of machine learning algorithm but they have so many hyperparameters that they have been considered too troublesome for inclusion in the Scikit-Learn library.
-.. Since sklearn hasn't been introduced yet, this sentence is confusing.
-.. Punctuation is a bit messed up here too.
-(A popular open-source machine learning toolbox) [Ped11]_
 
 .. A sentence starting with "Hyperparameter optimization is ..." should be either in the para above or below
+Hyperparameter optimization is the act of searching the space of possible configuration variables for a training algorithm in order to find a set of variables that allows the algorithm to achieve more desirable results.
 Hyperparameters generally have a significant effect on the success of machine learning algorithms.
 A poorly-configured SVM may perform no better than chance, while a well-configured one may achieve state-of-the-art prediction accuracy.
 To experts and non-experts alike, adjusting hyperparameters to optimize end-to-end performance can be a tedious and difficult task.
@@ -123,6 +126,17 @@ hyperparameters for deep neural networks [hp-dbn]_, convolutional neural network
 
 .. TODO: ADD "THE PAPER IS ORGANIZED AS FOLLOWS: ..."
 
+The paper is organized as follows:
+
+* Introduction to Hyperopt
+* Introduction to configuration spaces
+* How to analyze the search with the trials object
+* Parallel evaluation with Hyperopt using a cluster
+* Introduction to Hyperopt-Sklearn
+* Example usage of Hyperopt-Sklearn
+* Empirical evalutation of Hyperopt-Sklearn
+* Discussions and results
+* Ongoing and future work
 
 Getting Started with Hyperopt
 -----------------------------
