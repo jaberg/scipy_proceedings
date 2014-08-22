@@ -1140,18 +1140,6 @@ References
     *Interactive Bayesian Optimization: Learning Parameters for Graphics and
     Animation*,
     PhD thesis, University of British Columbia, 2010.
-.. [Hyperopt] http://jaberg.github.com/hyperopt
-.. [hp-dbn] https://github.com/jaberg/hyperopt-dbn
-.. [hp-sklearn] https://github.com/jaberg/hyperopt-sklearn
-.. [hp-convnet] https://github.com/jaberg/hyperopt-convnet
-.. [mongodb] www.mongodb.org
-.. [sklearn] http://scikit-learn.org
-.. [Spearmint] http://www.cs.toronto.edu/~jasper/software.html
-.. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
-
-..  <http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf>
-.. <http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf>
-
 .. [Ber11] J. Bergstra, R. Bardenet, Y. Bengio, and B. Kéggl. *Algorithms for hHyperparameter Optimization*,
            NIPS, 24:2546–2554, 2011.
 .. [Ber13a] J. Bergstra, D. Yamins, and D. D. Cox. *Making a Science of Model Search: Hyperparameter Optimization in Hundreds of Dimensions for Vision Architectures*,
@@ -1185,4 +1173,16 @@ References
            arXiv:1406.3896, 2014.
 .. [Tho13] C. Thornton, F. Hutter, H. H. Hoos, and K. Leyton-Brown. *Auto-WEKA: Automated selection and hyper-parameter optimization of classification algorithms*,
            KDD 847-855, 2013.
+.. [Hyperopt] http://jaberg.github.com/hyperopt
+.. [hp-dbn] https://github.com/jaberg/hyperopt-dbn
+.. [hp-sklearn] https://github.com/jaberg/hyperopt-sklearn
+.. [hp-convnet] https://github.com/jaberg/hyperopt-convnet
+.. [mongodb] www.mongodb.org
+.. [sklearn] http://scikit-learn.org
+.. [Spearmint] http://www.cs.toronto.edu/~jasper/software.html
+.. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
+
+..  <http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf>
+.. <http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf>
+
 
