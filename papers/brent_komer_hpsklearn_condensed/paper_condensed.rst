@@ -1097,7 +1097,7 @@ Care should be taken to identify these parameters in each model and they may nee
 
 It is possible for a user to add their own classifier to the search space as long as it fits the scikit-learn interface.
 This currently requires some understanding of how Hyperopt-Sklearn's code is structured and it would be nice to improve the support for this so minimal effort is required by the user.
-We also plan to allow the user to specify alternate scoring methods besides just accuracy and F-measure, as there can be cases where these are not best suited to the particular problem.
+The user may also specify alternate scoring methods besides just accuracy and F-measure, as there can be cases where these are not best suited to the particular problem.
 
 We have shown here that Hyperopt's random search, annealing search, and TPE algorithms make Hyperopt-Sklearn viable, but the slow convergence in e.g. Figure :ref:`perclf` and :ref:`validtpe` suggests
 that other optimization algorithms might be more call-efficient.
