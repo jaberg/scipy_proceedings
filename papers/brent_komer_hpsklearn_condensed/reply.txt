@@ -1,0 +1,119 @@
+
+To Reviewer 1:
+
+> You mention sklearn without mentioning what it is.
+We now refer to this project as scikit-learn in the text, and explain what it is in the introduction.
+
+
+> In two places you mention that something is "as simple as" selecting one of
+> a few fixed choices. It seems as if the hard-wiring in of certain features
+> is being sold as a feature. Perhaps an explanation of why those particular
+> features were selected and why they are sufficient (or other work that might
+> improve the situation) would help here.
+
+We don't understand the author's use of the term hard-wiring here, since in both cases (the algo and trials parameters) we are describing a plugin system.
+
+Still, the author makes a valid point that the phrase "as simple as" is a distracting and silly thing to write in an academic paper. We've rephrased both passages as follows:
+
+    1)
+    Hyperopt's search algorithms are created by global functions that use
+    extra keyword arguments to override default hyper-hyperparameters values.
+    For example, we can configure the TPE algorithm to transition from random
+    sampling to guided search after 10 initial jobs like this:
+
+    2)
+    Hyperopt supports parallel search via a special trials type called
+    ``MongoTrials``. To set up a parallel search process, use
+    ``MongoTrials`` instead of ``Trials`` in the ``fmin`` call:
+
+
+
+> Roughly one column is devoted to API-ish documentation on distributions.
+> Perhaps this could be condensed.
+
+We tried to condense this, but we felt it was important to describe the
+various sorts of distributions that Hyperopt supports and we could not make it
+both shorter and clearer.
+
+> Are there other systems either within the Python space or without that have
+> similar approaches? PyMC might be noteworthy (although I see that this was
+> released before widespread knowledge of PyMC (Although I'd be amazed if
+> James in particular didn't know about PyMC at this time)).
+
+Spearmint and SMAC are the most-obvious alternative to Hyperopt. We did
+already cite it, in the context of ongoing and future work but we have added
+an introductory section that talks about Spearmint and SMAC.
+
+    Alternative software packages to Hyperopt include primarily Spearmint and
+    SMAC. [Spearmint]_ provides Gaussian-Process Optimization as a Python
+    package.  The original spearmint code exists at
+    https://github.com/JasperSnoek/spearmint, while an updated version has
+    been recently released under a non-commercial license at
+    https://github.com/HIPS/Spearmint.  [SMAC]_ is a Java package that
+    provides the SMAC (same name) algorithm, which is similar to
+    Gaussian-Process Optimization except that regression forests provide the
+    engine for regression rather than Gaussian Processes. SMAC was developed
+    for configuration SAT solvers, but has been used for algorithm
+    configuration more generally and for machine learning hyperparameters in
+    particular (e.g. [Egg13]_).
+
+
+> Does there exist quantitative support for this work? Cases where HyperOpt
+> systems performed better than naive or even not-so-naive ones?
+
+Emprical support for Hyperopt had been shown in some of the cited work, but we
+agree with the reviewer that this work should have more empirical support.
+
+We have addressed this by incorporating a large portion of a poster presented
+at this year's SciPy by Brent Komer.
+
+
+
+Referee: 2
+
+> Hyperopt does not provide any machine-learning-specific tools. For example,
+> it does not do cross validation, or assessment of statistical
+> significance. Neither does it provide any tools for assessing the
+> thoroughness of the search or the goodness of fit of the parameters. It
+> simply handles the sampling and dispatching of jobs. The rest is up to
+> the user. As far as I understand, there is no provision of monitoring
+> tools to check on the state of the search while it is running.
+
+The reviewer is mostly right, except that it is possible to monitor the
+progress of search in real time when using MongoTrials, by accessing the Mongo
+database either directly or via a MongoTrials object.  A Hint has been added
+to the text to this effect.
+
+
+> Parameter space specification seem somewhat limited in that specifying
+> dependencies between parameters is not easy. Except for the use of choice
+> branches, variables are sampled independently. Any dependencies between
+> variables needs to be handled by the loss-evaluating function and is not
+> exposed to the search.
+
+That's correct, it is a limitation in the current implementation of both the search
+space langauge and the algorithms for searching such spaces.
+
+> The tool es open source and search algorithms can be added but there is no
+> documentation of the search algorithm API.
+
+We've added this text to the section on choosing search algorithms:
+
+    The API for actually implementing new search algorithms is beyond the scope of
+    this article, but the interested reader is invited to study the source code of
+    the ``anneal`` algorithm (anneal.py). This highly-documented search algorithm
+    is meant primarily as an introduction to implementing search algorithms.
+
+> In summary. The Hyperopt library is a useful tool for searching for well
+> performing hyper-parameters. It is not a serious optimization package nor
+> and provides only bare-bones parallelization . Its strength is in the
+> relative ease of use.
+> The tool has proven its usefulness already and this tutorial seems to provide
+> the necessary level of detail for someone to get started with it.
+
+We mostly agree with this summary, but we have added some citations to
+ongoing work on Gaussian-Process optimization in Hyperopt [Ber14] that's
+competitive with Spearmint on some low-dimensional search problems (taken from
+the AutoML suite) where very call-efficient exact optimization is required.
+
+

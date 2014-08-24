@@ -116,14 +116,22 @@ We are motivated to make hyperparameter optimization more reliable for four reas
 
 This paper describes the usage and architecture of Hyperopt, for both sequential and parallel optimization of expensive functions.
 
-.. Not anymore, we're going to talk about the Scikit-Learn library.
+Hyperopt can in principle be used for any SMBO problem (e.g. [Ber14]_), but our development and testing efforts have focused on the optimization of
+hyperparameters for deep neural networks [hp-dbn]_, convolutional neural networks for object recognition [hp-convnet]_, and algorithms within the Scikit-Learn library ([Kom14]_ and this paper).
 
-Hyperopt can in principle be used for any SMBO problem, but our development and testing efforts have been limited so far to the optimization of
-hyperparameters for deep neural networks [hp-dbn]_, convolutional neural networks for object recognition [hp-convnet]_, and algorithms within the Scikit-Learn library. [Ped11]_
+Alternative software packages to Hyperopt include primarily Spearmint and
+SMAC. [Spearmint]_ provides Gaussian-Process Optimization as a Python package.
+The original spearmint code exists at https://github.com/JasperSnoek/spearmint,
+while an updated version has been recently released under a non-commercial license at
+https://github.com/HIPS/Spearmint.
+[SMAC]_ is a Java package that provides the SMAC (same name) algorithm, which is
+similar to Gaussian-Process Optimization except that regression forests
+provide the engine for regression rather than Gaussian Processes. SMAC was
+developed for configuration SAT solvers, but has been used for algorithm
+configuration more generally and for machine learning hyperparameters in
+particular (e.g. [Egg13]_).
 
-.. TODO: ADD "THE PAPER IS ORGANIZED AS FOLLOWS: ..."
-
-The paper is organized as follows:
+The article is organized as follows:
 
 * Introduction to Hyperopt
 * Introduction to configuration spaces
@@ -132,8 +140,11 @@ The paper is organized as follows:
 * Introduction to Hyperopt-Sklearn
 * Example usage of Hyperopt-Sklearn
 * Empirical evalutation of Hyperopt-Sklearn
-* Discussions and results
+* Discussion of results
 * Ongoing and future work
+
+Portions of this article have been presented previously as [Ber13b]_ and [Kom14]_. 
+
 
 Getting Started with Hyperopt
 -----------------------------
@@ -204,27 +215,33 @@ we have given Hyperopt an idea of what range of values for :math:`y` to prioriti
 Step 3: choose a search algorithm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Choosing the search algorithm is currently as simple as passing the function that implements that algorithm 
-as the ``algo`` keyword argument to ``hyperopt.fmin``.
-Currently supported search algorithms are random (``hyperopt.rand.suggest``), 
+Assigning the ``algo`` keyword argument to ``hyperopt.fmin`` is recommended
+way to choose a search algorithm.
+Currently supported search algorithms
+are random search (``hyperopt.rand.suggest``), 
 annealing (``hyperopt.anneal.suggest``), 
 and TPE (``hyperopt.tpe.suggest``).
-To use random search on our search problem we can type:
+There is an experimental Gaussian-process-based search algorithm available as
+well, which can be downloaded separately from
+https://github.com/hyperopt/hyperopt-gpsmbo.
+For example, to use random search on our search problem we can type:
 
 .. code-block:: python
 
     from hyperopt import hp, fmin, rand, tpe, space_eval
     best = fmin(q, space, algo=rand.suggest)
-    print best
     print space_eval(space, best)
 
-.. TODO: REMOVE THE XXX bits from the source code, why are they there??
 
-
-The search algorithms are global functions which may generally have extra keyword arguments
-that control their operation beyond the ones used by ``fmin`` (they represent hyper-hyperparameters!).
-The intention is that these hyper-hyperparameters are set to default that work for a range of configuration problems,
-but if you wish to change them you can do it like this:
+Search algorithms can be complicated, and so they may have their own internal
+configuration parameters (hyper-hyperparameters) that control how they optimize the function at hand.
+The reason hyperopt exists is that hyper-hyperparameter defaults are
+more reliable than the default values for machine learning algorithm hyperparameters,
+but hyper-hyperparameters still exist.
+Hyperopt's search algorithms are created by global functions that
+use extra keyword arguments to override default hyper-hyperparameters values.
+For example, we can configure the TPE algorithm to transition from random
+sampling to guided search after 10 initial jobs like this:
 
 .. code-block:: python
 
@@ -232,19 +249,22 @@ but if you wish to change them you can do it like this:
     from hyperopt import hp, fmin, tpe
     algo = partial(tpe.suggest, n_startup_jobs=10)
     best = fmin(q, space, algo=algo)
-    print best
+    print space_eval(space, best)
 
-.. TODO: REMOVE THE XXX bits from the source code, why are they there??
-
-In a nutshell, these are the steps to using Hyperopt.
-Implement an objective function that maps configuration points to a real-valued loss value,
-define a configuration space of valid configuration points,
-and then call ``fmin`` to search the space to optimize the objective function.
+To summarize, these are the steps to using Hyperopt:
+(1) implement an objective function that maps configuration points to a real-valued loss value,
+(2) define a configuration space of valid configuration points,
+and then (3) call ``fmin`` to search the space to optimize the objective function.
 The remainder of the paper describes
 (a) how to describe more elaborate configuration spaces,
 especially ones that enable more efficient search by expressing *conditional variables*,
 (b) how to analyze the results of a search as stored in a ``Trials`` object,
 and (c) how to use a cluster of computers to search in parallel.
+
+The API for actually implementing new search algorithms is beyond the scope of
+this article, but the interested reader is invited to study the source code of
+the ``anneal`` algorithm (anneal.py). This highly-documented search algorithm
+is meant primarily as an introduction to implementing search algorithms.
 
 
 
@@ -678,6 +698,7 @@ it might look like:
     fmin(f, space=hp.uniform('x', -10, 10),
         trials=trials)
     print trials.trials[0]['results']
+    print trials.argmin
 
 An objective function can use just about any keys to store auxiliary
 information, but there are a few special keys
@@ -714,8 +735,8 @@ to assess a-priori), but the improvement in
 efficiency as a function of wall time can make the sacrifice worthwhile.
 
 Hyperopt supports parallel search via a special trials type called
-``MongoTrials``. Setting up a parallel search is as simple as using
-``MongoTrials`` instead of ``Trials``:
+``MongoTrials``. To set up a parallel search process, use
+``MongoTrials`` instead of ``Trials`` in the ``fmin`` call:
 
 .. code-block:: python
 
@@ -754,6 +775,10 @@ Note that mongodb databases persist until they are deleted, and ``fmin`` will
 never delete things from mongodb. If you call ``fmin`` using a particular
 database one day, stop the search, and start it again later,  then ``fmin``
 will continue where it left off.
+
+**HINT:** Results in a MongoTrials database can be visualized in real-time by
+querying the Mongo database, or by creating a ``MongoTrials`` object and
+calling ``MongoTrials.refresh()``.
 
 
 The Ctrl Object for Realtime Communication with MongoDB
@@ -1144,6 +1169,8 @@ References
            NIPS, 24:2546–2554, 2011.
 .. [Ber13a] J. Bergstra, D. Yamins, and D. D. Cox. *Making a Science of Model Search: Hyperparameter Optimization in Hundreds of Dimensions for Vision Architectures*,
            In Proc. ICML, 2013a.
+.. [Ber13b] J. Bergstra, D. Yamins, and D. D. Cox. *Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learning Algorithms*,
+           Proc. of the 12th Python in Science Conf (SciPy2013), 13-20, 2013.
 .. [Ber14] J. Bergstra, B. Komer, C. Eliasmith, and D. Warde-Farley. *Preliminary Evaluation of Hyperopt Algorithms on HPOLib*,
            ICML AutoML Workshop, 2014.
 .. [Cir12] D. Ciresan, U. Meier, and J. Schmidhuber. *Multi-column Deep Neural Networks for Image Classification*,
@@ -1158,6 +1185,9 @@ References
            ACM SIGKDD explorations newsletter, 11(1):10-18, 2009.
 .. [Hut11] F. Hutter, H. Hoos, and K. Leyton-Brown. *Sequential model-based optimization for general algorithm configuration*,
            LION-5, 2011. Extended version as UBC Tech report TR-2010-10.
+.. [Kom14] B. Komer, J. Bergstra, C. Eliasmith. *Hyperopt-Sklearn: Automatic
+Hyperparameter Configuration for Scikit-Learn*,
+           SciPy, 2014.
 .. [Lar07] H. Larochelle, D. Erhan, A. Courville, J. Bergstra, and Y. Bengio. *An empirical evaluation of deep architectures on problems with many factors of variation*,
            ICML, 473-480, 2007.
 .. [Lec98] Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner. *Gradient-based learning applied to document recognition*,
