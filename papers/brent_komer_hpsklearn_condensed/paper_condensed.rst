@@ -18,12 +18,10 @@
 :email: davidcox@fas.harvard.edu
 :institution: Harvard University
 
-.. XXX: Search and replace sklearn with Scikit-Learn wherever it's mentioned in the text.
-.. XXX: Also make the capitalization of Hyperopt-Sklearn consistent
 
---------------------------------------------------------------------------------------------
-Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learning Algorithms
---------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+Hyperopt: A Python Library for Model Selection and Hyperparameter Optimization
+------------------------------------------------------------------------------
 
 .. class:: abstract
 
@@ -568,8 +566,6 @@ let's look at how one might describe a set of classification algorithms in [skle
 This example is done without using the Hyperopt-Sklearn project, 
 to indicate how Hyperopt can be used in general.
 
-.. TODO: distinguish this illustrative code from the *actual* hpsklearn project.
-
 .. code-block:: python
 
     from hyperopt import hp
@@ -722,7 +718,6 @@ JSON allows for only strings, numbers, dictionaries, lists, tuples, and date-tim
 
 **HINT:** To store NumPy arrays, serialize them to a string, and consider storing
 them as attachments.
-
 
 Parallel Evaluation with a Cluster
 ----------------------------------
@@ -1049,7 +1044,7 @@ and compared the quality of solution with specialized searches of specific class
 .. figure:: AvgMinValidErrorTPE.png
 
    :label:`validtpe`
-   TPE makes gradual progress on 20 Newsgroups over 300 iterations and gives no indication of convergence. The results are averaged over 9 trials.
+   TPE makes gradual progress on 20 Newsgroups over 300 iterations. The results are averaged over 9 trials.
 
 
 Discussion
@@ -1154,7 +1149,6 @@ This project has been supported by the Rowland Institute of Harvard,
 the National Science Foundation (IIS 0963668),
 the NSERC Banting Fellowship program, the NSERC Engage Program and by D-Wave Systems. 
 
-.. TODO: clean up references formatting, make it more consistent
 
 References
 ----------
@@ -1168,9 +1162,9 @@ References
 .. [Ber11] J. Bergstra, R. Bardenet, Y. Bengio, and B. Kéggl. *Algorithms for hHyperparameter Optimization*,
            NIPS, 24:2546–2554, 2011.
 .. [Ber13a] J. Bergstra, D. Yamins, and D. D. Cox. *Making a Science of Model Search: Hyperparameter Optimization in Hundreds of Dimensions for Vision Architectures*,
-           In Proc. ICML, 2013a.
+           In Proc. ICML, 2013.
 .. [Ber13b] J. Bergstra, D. Yamins, and D. D. Cox. *Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learning Algorithms*,
-           Proc. of the 12th Python in Science Conf (SciPy2013), 13-20, 2013.
+           Proc. SciPy2013, 13-20, 2013.
 .. [Ber14] J. Bergstra, B. Komer, C. Eliasmith, and D. Warde-Farley. *Preliminary Evaluation of Hyperopt Algorithms on HPOLib*,
            ICML AutoML Workshop, 2014.
 .. [Cir12] D. Ciresan, U. Meier, and J. Schmidhuber. *Multi-column Deep Neural Networks for Image Classification*,
@@ -1185,9 +1179,8 @@ References
            ACM SIGKDD explorations newsletter, 11(1):10-18, 2009.
 .. [Hut11] F. Hutter, H. Hoos, and K. Leyton-Brown. *Sequential model-based optimization for general algorithm configuration*,
            LION-5, 2011. Extended version as UBC Tech report TR-2010-10.
-.. [Kom14] B. Komer, J. Bergstra, C. Eliasmith. *Hyperopt-Sklearn: Automatic
-Hyperparameter Configuration for Scikit-Learn*,
-           SciPy, 2014.
+.. [Kom14] B. Komer, J. Bergstra, C. Eliasmith. *Hyperopt-Sklearn: Automatic Hyperparameter Configuration for Scikit-Learn*,
+           In Proc. SciPy 2014 (forthcoming), 2014.
 .. [Lar07] H. Larochelle, D. Erhan, A. Courville, J. Bergstra, and Y. Bengio. *An empirical evaluation of deep architectures on problems with many factors of variation*,
            ICML, 473-480, 2007.
 .. [Lec98] Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner. *Gradient-based learning applied to document recognition*,
@@ -1198,16 +1191,16 @@ Hyperparameter Configuration for Scikit-Learn*,
 .. [Ped11] F. Pedregosa, G. Varoquaux, A. Gramfort, V. Michel, B. Thirion, O. Grisel, M. Blondel, P. Prettenhofer, R. Weiss, V. Dubourg, J. Vanderplas, A. Passos, D. Cournapeau, M. Brucher, M. Perrot, and E. Duchesnay. *Scikit-learn: Machine Learning in Python*,
            Journal of Machine Learning Research, 12:2825–2830, 2011.
 .. [Sno12] J. Snoek, H. Larochelle, and R. P. Adams. *Practical Bayesian optimization of machine learning algorithms*,
-           Neural Information Processing Systems, 2012.
+           Proc. NIPS, 2012.
 .. [Swe14] K. Swersky, J. Snoek, and R.P. Adams. *Freeze-Thaw Bayesian Optimization*,
            arXiv:1406.3896, 2014.
 .. [Tho13] C. Thornton, F. Hutter, H. H. Hoos, and K. Leyton-Brown. *Auto-WEKA: Automated selection and hyper-parameter optimization of classification algorithms*,
-           KDD 847-855, 2013.
+           Proc. KDD, 2013.
 .. [Hyperopt] http://jaberg.github.com/hyperopt
-.. [hp-dbn] https://github.com/jaberg/hyperopt-dbn
-.. [hp-sklearn] https://github.com/jaberg/hyperopt-sklearn
-.. [hp-convnet] https://github.com/jaberg/hyperopt-convnet
-.. [mongodb] www.mongodb.org
+.. [hp-dbn] http://github.com/jaberg/hyperopt-dbn
+.. [hp-sklearn] http://github.com/jaberg/hyperopt-sklearn
+.. [hp-convnet] http://github.com/jaberg/hyperopt-convnet
+.. [mongodb] http://www.mongodb.org
 .. [sklearn] http://scikit-learn.org
 .. [Spearmint] http://www.cs.toronto.edu/~jasper/software.html
 .. [SMAC] http://www.cs.ubc.ca/labs/beta/Projects/SMAC/#software
