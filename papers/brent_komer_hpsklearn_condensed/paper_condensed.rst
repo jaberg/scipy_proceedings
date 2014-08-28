@@ -39,7 +39,7 @@ Hyperopt: A Python Library for Model Selection and Hyperparameter Optimization
 
 .. class:: keywords
 
-    Bayesian optimization, hyperparameter optimization, model selection, scikit-learn
+    Bayesian optimization, hyperparameter optimization, model selection, Scikit-Learn
 
 
 Introduction
@@ -475,9 +475,7 @@ You can add new functions to the ``scope`` object with the ``define`` decorator:
     #    on a random integer x.
     print sample(expr_space)
 
-Read through ``hyperopt.pyll.base`` and ``hyperopt.pyll.stochastic`` to see the
-functions that are available, and feel free to add your own.
-One important caveat is that functions used in configuration space descriptions
+Note well that functions used in configuration space descriptions
 must be serializable (with pickle module) in order to be compatible with parallel search (discussed below).
 
 
@@ -827,20 +825,24 @@ evaluation in the parallel case can do so by using a lower-level calling
 convention for their objective function.
 
 
-Hyperopt-Sklearn: Automatic Hyperparameter Configuration for Scikit-Learn
--------------------------------------------------------------------------
+Case Study: Hyperopt-Sklearn
+----------------------------
 
-Relative to DBNs and convnets, algorithms such as Support Vector Machines (SVMs) and Random Forests (RFs) have a small-enough number of hyperparameters that manual tuning and grid or random search provides satisfactory results.  Taking a step back though, there is often no particular reason to use either an SVM or an RF when they are both computationally viable.
+Relative to DBNs and convnets, algorithms such as Support Vector Machines (SVMs) and Random Forests (RFs) have a small-enough number of hyperparameters that manual tuning and grid or random search often provides satisfactory results.
+Taking a step back though, there is often no particular reason to use either an SVM or an RF when they are both computationally viable.
 A model-agnostic practitioner may simply prefer to go with the one that provides greater accuracy.
 In this light, *the choice of classifier can be seen as hyperparameter* alongside the :math:`C`-value in the SVM and the max-tree-depth of the RF.
 Indeed the choice and configuration of *preprocessing* components may likewise be seen as part of the model selection / hyperparameter optimization problem.
+The combinatorial space of preprocessing options and various classifiers is
+difficult to do manually, even with the assistance of a compute cluster
+performing grid or random search.
 
 The Auto-Weka project [Tho13]_ was the first to show that an entire library of machine learning approaches (Weka [Hal09]_ ) can be searched within the scope of a single run of hyperparameter tuning.
 However, Weka is a GPL-licensed Java library, and was not written with scalability in mind, so we feel there is a need for alternatives to Auto-Weka.
 Scikit-learn [Ped11]_ is another library of machine learning algorithms. Is written in Python (with many modules in C for greater speed), and is BSD-licensed.
 Scikit-learn is widely used in the scientific Python community and supports many machine learning application areas.
 
-In the following sections we introduce Hyperopt-Sklearn: a project that brings the benefits of automatic algorithm configuration to users of Python and scikit-learn.
+In the following sections we introduce Hyperopt-Sklearn: a project that brings the benefits of automatic algorithm configuration to users of Python and Scikit-Learn.
 Hyperopt-Sklearn uses Hyperopt to describe a search space over possible configurations of Scikit-Learn components, including preprocessing and classification modules.
 The next section describes our configuration space of 6 classifiers and 5 preprocessing modules that encompasses a strong set of classification systems for dense and sparse feature classification (of images and text).
 This is followed by experimental evidence that search over this space is viable, meaningful, and effective.
@@ -872,7 +874,7 @@ Practitioners usually address this optimization by hand, by grid search, or by r
 search.
 In this paper we discuss solving it with the Hyperopt optimization library.
 The basic approach is to set up a search space with random variable
-hyperparameters, use scikit-learn to implement the objective function
+hyperparameters, use Scikit-Learn to implement the objective function
 that performs model training and model validation, and use Hyperopt to
 optimize the hyperparamters.
 
@@ -884,7 +886,7 @@ Preprocessing algorithms include things like component-wise Z-scaling
 (Normalizer) and Principle Components Analysis (PCA).
 A full classification algorithm typically includes a series of
 preprocessing steps followed by a classifier.
-For this reason, scikit-learn provides a *pipeline* data structure to
+For this reason, Scikit-Learn provides a *pipeline* data structure to
 represent and use a sequence of preprocessing steps and a classifier as if
 they were just one component (typically with an API similar to the classifier).
 Although Hyperopt-Sklearn does not formally use Scikit-Learn's pipeline
@@ -917,7 +919,7 @@ Allowing for a 10-way discretization of real-valued hyperparameters, and taking 
 
 
 Finally, the search space becomes an optimization problem when we also define a scalar-valued search *objective*.
-Hyperopt-Sklearn uses scikit-learn's `score` method on *validation data* to define the search criterion.
+Hyperopt-Sklearn uses Scikit-Learn's `score` method on *validation data* to define the search criterion.
 For classifiers, this is the so-called "Zero-One Loss": the number of correct label predictions among
 data that has been withheld from the data set used for training (and also from
 the data used for testing *after* the model selection search process).
@@ -932,7 +934,7 @@ Each evaluation during optimization performs training on a large fraction of the
 At the end of search, the best configuration is retrained on the whole data set to produce the classifier that handles subsequent ``predict`` calls.
 
 One of the important goals of Hyperopt-Sklearn is that it is easy to learn and to use.
-To facilitate this, the syntax for fitting a classifier to data and making predictions is very similar to scikit-learn.
+To facilitate this, the syntax for fitting a classifier to data and making predictions is very similar to Scikit-Learn.
 Here is the simplest example of using this software.
 
 
@@ -944,7 +946,7 @@ Here is the simplest example of using this software.
    estim = HyperoptEstimator()
    # Search the space of classifiers and preprocessing
    # steps and their respective hyperparameters in
-   # scikit-learn to fit a model to the data
+   # Scikit-Learn to fit a model to the data
    estim.fit(train_data, train_label)
    # Make a prediction using the optimized model
    prediction = estim.predict(unknown_data)
@@ -1056,8 +1058,8 @@ Hyperopt-Sklearn's scores are relatively good on each data set, indicating that 
 The model with the best performance on the MNIST Digits data set uses deep artificial neural networks. Small receptive fields of convolutional winner-take-all neurons build up the large network.
 Each neural column becomes an expert on inputs preprocessed in different ways,
 and the average prediction of 35 deep neural columns to come up with a single final prediction [Cir12]_.
-This model is much more advanced than those available in scikit-learn.
-The previously best known model in the scikit-learn search space is
+This model is much more advanced than those available in Scikit-Learn.
+The previously best known model in the Scikit-Learn search space is
 a radial-basis SVM on centered data that scores 98.6%, and Hyperopt-Sklearn
 matches that performance [MNIST]_.
 
@@ -1112,10 +1114,10 @@ and there are more ways to combine even the existing components.
 Other types of data require different preprocessing, and other prediction
 problems exist beyond classification.
 In expanding the search space, care must be taken to ensure that the benefits of new models outweigh the greater difficulty of searching a larger space.
-There are some parameters that scikit-learn exposes that are more implementation details than actual hyperparameters that affect the fit (such as ``algorithm`` and ``leaf_size`` in the KNN model).
+There are some parameters that Scikit-Learn exposes that are more implementation details than actual hyperparameters that affect the fit (such as ``algorithm`` and ``leaf_size`` in the KNN model).
 Care should be taken to identify these parameters in each model and they may need to be treated differently during exploration.
 
-It is possible for a user to add their own classifier to the search space as long as it fits the scikit-learn interface.
+It is possible for a user to add their own classifier to the search space as long as it fits the Scikit-Learn interface.
 This currently requires some understanding of how Hyperopt-Sklearn's code is structured and it would be nice to improve the support for this so minimal effort is required by the user.
 The user may also specify alternate scoring methods besides just accuracy and F-measure, as there can be cases where these are not best suited to the particular problem.
 
