@@ -11,9 +11,9 @@ We now refer to this project as scikit-learn in the text, and explain what it is
 > features were selected and why they are sufficient (or other work that might
 > improve the situation) would help here.
 
-We don't understand the author's use of the term hard-wiring here, since in both cases (the algo and trials parameters) we are describing a plugin system.
+We don't understand the reviewer's use of the term hard-wiring here, since in both cases (the algo and trials parameters) we are describing a plugin system.
 
-Still, the author makes a valid point that the phrase "as simple as" is a distracting and silly thing to write in an academic paper. We've rephrased both passages as follows:
+Still, the reviewer makes the valid point that the phrase "as simple as" is distracting and a silly thing to write in an academic paper. We've rephrased both passages as follows:
 
     1)
     Hyperopt's search algorithms are created by global functions that use
